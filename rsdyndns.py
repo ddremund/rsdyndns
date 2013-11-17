@@ -16,3 +16,40 @@
 
 import pyrax
 import stun
+#import socket
+#import pprint
+import argparse
+import sys
+
+
+def main():
+
+	parser = argparse.ArgumentParser(description = "Updates a Rackspace Cloud "
+		"DNS A record with your system's current IP address.")
+
+	parser.add_argument('-z', '--zone', required = True, 
+		help = "The zone containing the DNS record.")
+	parser.add_argument('-n', '--name', required = True, 
+		help = "The name of the A record to update.")
+	parser.add_argument('-c', '--creds_file', default = None, 
+		help = "An INI format file containing your cloud credentials.")
+	parser.add_argument('-u', '--user', default = None, 
+		help = "Your Rackspace Cloud user name.")
+	parser.add_argument('-k', '--api_key', default = None, 
+		help = "Your Rackspace Cloud API key.")
+
+	args = parser.parse_args()
+	if not (args.creds_file or (args.user and args.api_key)):
+		print "Must provide either creds file or credentials as arguments."
+		sys.exit(1)
+
+	#printer = pprint.PrettyPrinter()
+	#printer.pprint(socket.getaddrinfo(socket.gethostname(), None))
+
+	#addresses = [item[4][0] for item 
+	#			in socket.getaddrinfo(socket.gethostname(), None)]
+
+	
+
+if __name__ == '__main__':
+	main()
