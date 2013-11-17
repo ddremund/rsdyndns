@@ -20,6 +20,7 @@ import stun
 #import pprint
 import argparse
 import sys
+import os
 
 
 def main():
@@ -39,9 +40,18 @@ def main():
 		help = "Your Rackspace Cloud API key.")
 
 	args = parser.parse_args()
-	if not (args.creds_file or (args.user and args.api_key)):
+
+	pyrax.set_setting("identity_type", "rackspace")
+
+	if args.creds_file:
+		pyrax.set_credential_file(os.path.abspath(
+									os.path.expanduser(args.creds_file)))
+	elif args.user and args.api_key:
+		pyrax.set_credentials(args.user, args.api_key)
+	else:
 		print "Must provide either creds file or credentials as arguments."
 		sys.exit(1)
+
 
 	#printer = pprint.PrettyPrinter()
 	#printer.pprint(socket.getaddrinfo(socket.gethostname(), None))
@@ -49,7 +59,8 @@ def main():
 	#addresses = [item[4][0] for item 
 	#			in socket.getaddrinfo(socket.gethostname(), None)]
 
-	
+	_, ext_ip, _ = stun.get_ip_info()
+
 
 if __name__ == '__main__':
 	main()
