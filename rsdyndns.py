@@ -17,7 +17,6 @@
 import pyrax
 import stun
 #import socket
-#import pprint
 import argparse
 import sys
 import os
@@ -49,18 +48,27 @@ def main():
 	elif args.user and args.api_key:
 		pyrax.set_credentials(args.user, args.api_key)
 	else:
-		print "Must provide either creds file or credentials as arguments."
-		sys.exit(1)
-
-
-	#printer = pprint.PrettyPrinter()
-	#printer.pprint(socket.getaddrinfo(socket.gethostname(), None))
+		sys.exit("Must provide either creds file or credentials as arguments.")
 
 	#addresses = [item[4][0] for item 
 	#			in socket.getaddrinfo(socket.gethostname(), None)]
 
 	_, ext_ip, _ = stun.get_ip_info()
 
+	dns = pyrax.cloud_dns
+	try:
+		zone = dns.find(name = args.zone)
+	except pyrax.exceptions.NotFound:
+		sys.exit("Zone not found.")
+	try:
+		record = zone.find_record('A', args.name)
+	except pyrax.exceptions.DomainRecordNotFound:
+		zone.add_records([{"type": 'A', 
+							"name": args.name,
+							"data": ext_ip,
+							"ttl": 300}])
+	else:
+		record.update(data = ext_ip)
 
 if __name__ == '__main__':
 	main()
