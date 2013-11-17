@@ -16,7 +16,6 @@
 
 import pyrax
 import stun
-#import socket
 import argparse
 import sys
 import os
@@ -49,9 +48,6 @@ def main():
 		pyrax.set_credentials(args.user, args.api_key)
 	else:
 		sys.exit("Must provide either creds file or credentials as arguments.")
-
-	#addresses = [item[4][0] for item 
-	#			in socket.getaddrinfo(socket.gethostname(), None)]
 
 	_, ext_ip, _ = stun.get_ip_info()
 
