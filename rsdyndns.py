@@ -44,7 +44,7 @@ def main():
 
 	if args.creds_file:
 		pyrax.set_credential_file(os.path.abspath(
-									os.path.expanduser(args.creds_file)))
+			os.path.expanduser(args.creds_file)))
 	elif args.user and args.api_key:
 		pyrax.set_credentials(args.user, args.api_key)
 	else:
@@ -64,9 +64,9 @@ def main():
 		record = zone.find_record('A', args.name)
 	except pyrax.exceptions.DomainRecordNotFound:
 		zone.add_records([{"type": 'A', 
-							"name": args.name,
-							"data": ext_ip,
-							"ttl": 300}])
+						"name": args.name,
+						"data": ext_ip,
+						"ttl": 300}])
 	else:
 		record.update(data = ext_ip)
 
